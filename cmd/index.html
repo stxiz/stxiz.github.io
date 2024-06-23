@@ -1,0 +1,679 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Command Line Interface</title>
+  <style>
+    a{
+      cursor: url('https://cdn.custom-cursor.com/db/4397/32/arrow2535.png'), auto;
+    }
+    body {
+      background-color: #1B1B1B;
+      color: #F0F0F0;
+      font-family: monospace;
+      font-size: 16px;
+      margin: 0;
+      padding: 0;
+    cursor: url('https://cdn.custom-cursor.com/db/4398/32/arrow2535.png'), auto;
+    }
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f3f3f3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.command-line {
+    width: 65%;
+    height: 85%;
+    background-color: #2F2F2F;
+    border-radius: 10px;
+    overflow: hidden;
+    position:absolute;
+}
+
+.top-bar {
+    height: 35px;
+    background-color: #494949;
+    display: flex;
+    cursor: move;
+}
+
+.red-dot, .yellow-dot, .green-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.red-dot {
+    background-color: #FF5F57;
+}
+
+.yellow-dot {
+    background-color: #FFBD2E;
+}
+
+.green-dot {
+    background-color: #28A745;
+}
+    .input-container {
+      border-bottom: 1px solid #4D4D4D;
+      display: flex;
+      padding: 10px;
+    }
+    .text {
+      border-bottom: 1px solid #4D4D4D;
+      display: flex;
+      padding: 10px;
+    }
+
+    .input-container input {
+      background-color: transparent;
+      border: none;
+      color: #F0F0F0;
+      font-family: inherit;
+      font-size: inherit;
+      outline: none;
+      width: 100%;
+    }
+
+    .output-container {
+      overflow-y: auto;
+      height: 660px;
+    }
+
+    .command {
+      color: #00FF00;
+    }
+
+    .error {
+      color: #FF0000;
+    font-weight:bold;
+     font-family: "Yu Gothic UI Semibold", sans-serif;
+background-color:yellow;
+    }
+    .f {
+      color: #FF0000;
+    font-weight:bold;
+    }
+    .file{
+      color:#85CDF2;
+    }
+
+    .teacher{
+color:#deab00;
+    }
+
+.v{color:green;
+ font-weight:bold;}
+#inputBox {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  outline: none;
+}
+
+.popup {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+
+}
+
+.popup-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  height: 200px;
+  background-color: #fff;
+  border-radius: 5px;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px 10px;
+  font-size: 14px;
+  background-color: #f1f1f1;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#popupText {
+  margin-top: 20px;
+  font-size: 18px;
+color:black;
+}
+#captchaText{
+color:orange;
+  font-size: 36px;}
+#score{
+color:orange}
+.alertBox {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(to left, white, white);
+  color: black;
+  padding: 20px;
+  border-radius: 5px;
+  width: 300px;
+  height: 200px;
+}
+
+.alertContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.alertContent button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px 10px;
+  font-size: 14px;
+  background-color: #f1f1f1;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.alertContent{
+margin: auto;
+  font-size: 32px;
+}
+    .taskbar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 48px;
+        background-color: #333;
+        width: 100px
+    }
+
+    .taskbar-icon {
+        display: inline-block;
+        width: 0px;
+        height: 0px;
+        background-color: rgba(255, 255, 255 ,0.3);
+        color: #fff;
+        text-align: center;
+        line-height: 30px;
+        cursor: pointer;
+    }
+    
+
+    img {
+        display: block; /* 显示图片 */
+        margin: auto; /* 居中图片 */
+        max-width: 100%; /* 根据按钮大小自动调整图片尺寸 */
+        max-height: 100%
+    }
+    .container,
+    .first,
+    .second {
+        position: absolute;
+    }
+    .container {
+        top: 70px;
+        bottom: 0;
+        right: 90%;
+        left: 10px;
+        width: 170px;
+        height: 50px;
+        transition: all 0.3s ease;
+    }
+    .wrap {
+        width: 100%;
+        height: 50px;
+        border: 2px solid #FFF;
+        transition: all 0.3s ease;
+        border-radius: 5px;
+    }
+    .first,
+    .second {
+        width: 100%;
+        height: 50px;
+        font-family: 'Open Sans', sans-serif;
+        transition: all 0.2s ease-in-out;
+        font-size: 17px;
+        text-transform: uppercase;
+        color: #FFF;
+        letter-spacing: 2px;
+        text-align: center;
+        vertical-align: middle;
+        line-height: 50px;
+    }
+    .second {
+        opacity: 0;
+    }
+    .container:hover {
+        width: 280px;
+    }
+    .container:hover .wrap {
+        padding-bottom: 17px;
+    }
+    .container:hover .first {
+        transform: translateY(-8px);
+        padding-top: 5px;
+    }
+    .container:hover .second {
+        transform: translateY(20px);
+        opacity: 1;
+    }
+    .t{
+        margin: auto;
+    }
+.a{
+    height: 560px;
+    width: 440px;
+    background-image:url("color.png") ;
+}
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 10000;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    cursor: url('https://cdn.custom-cursor.com/db/4397/32/arrow2535.png')
+
+}
+
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+    cursor: url('https://cdn.custom-cursor.com/db/4397/32/arrow2535.png')
+
+}
+
+.sidenav a:hover, .offcanvas a:focus{
+    color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+#main {
+    transition: margin-left .5s;
+    padding: 16px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+body {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(45deg, #ffd700, #ffffff, #f0f0f0, #add8e6);
+        background-size: 400% 400%;
+        animation: gradient 15s ease infinite;
+    }
+    
+    @keyframes gradient {
+        0% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+  </style>
+</head>
+<body>
+<div id="mySidenav" class="sidenav">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <a href="https://stxiz.github.io/">Home</a>
+  <BR><BR>
+  <a href="https://stxiz.github.io/tags">Tags</a>
+  <BR><BR>
+  <a href="https://stxiz.github.io/archives/">Archives</a>
+  <BR><BR>
+  <a href="https://stxiz.github.io/about/">About</a>
+  <BR><BR>
+</BR></BR></BR></BR></BR></BR></BR></BR></div>
+
+<style>
+  /* 弹窗样式 */
+  #pop1 {
+    position: fixed;
+    top: 10%;
+    left: -300px; /* 初始位置在屏幕左侧之外 */
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    z-index: 9999;
+    transition: left 0.5s ease; /* 动画效果 */
+  }
+
+  /* 成功字样样式 */
+  .success-text1 {
+    color: green;
+    font-size: 16px;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+  }
+
+  /* 按钮样式 */
+  .close-btn1 {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    color:black
+  }
+  .pic1{
+    max-height: 23px;
+    max-width: 50px;
+  }
+</style>
+
+<body>
+
+<div id="pop1">
+  <div class="success-text1"><img class="pic1" src="/cmd/index/logo.png"> <BR>Enter to cmd success!!!</BR></div>
+  <div class="close-btn1" onclick="closePop1()">×</div>
+</div>
+
+<script>
+  // 打开弹窗函数
+  function openPop1() {
+    document.getElementById("pop1").style.left = "7%";
+  }
+
+  // 关闭弹窗函数
+  function closePop1() {
+    document.getElementById("pop1").style.left = "-300px";
+  }
+
+  // 页面加载后自动打开弹窗
+  window.onload = function() {
+    openPop1();
+  };
+</script>
+
+<div class="d">
+
+    <div class="a">
+    </div>
+</div>
+
+<div class="command-line" id="cmd">
+    <div class="top-bar" id="a">
+
+        <div class="red-dot" id="1" onclick="closea()"></div>
+        <div class="yellow-dot" id="2" onclick="mina()"></div>
+        <div class="green-dot" id="3" onclick="maxa()"></div>
+    </div>
+    <div class="content">
+  <div class="input-container">
+    <span>$</span>
+    <input id="input" type="text" placeholder="Enter command..."></div>
+  <div class="output-container" id="output"></div>
+</div></div>
+  <div id="popup" class="popup">
+    <div class="popup-content">
+      <button id="closeButton" class="close-button">×</button>
+      <h1 id="popupText"></h1>
+      <div id="captchaText"></div>
+    </div>
+  </div>
+  <div id="alertBox" class="alertBox">
+    <div class="alertContent">
+      <span id="alertMessage"></span>
+      <button onclick="closeAlert()">×</button>
+    </div>
+  </div>
+<div class="taskbar">
+  <span style="font-size:18px;cursor:pointer" onclick="openNav()">&#9776; Open</span>
+</div>
+  <script>
+var popupText = document.getElementById('popupText');
+var popup = document.getElementById('popup');
+var closeButton = document.getElementById('closeButton');
+    const input = document.getElementById('input')
+    const output = document.getElementById('output')
+
+    input.addEventListener('keydown', event => {
+      if (event.key === 'Enter') {
+        const command = input.value.toLowerCase()
+
+        input.value = ''
+
+        if (command === 'help') {
+          printOutput('list of commands:<br><br>help - show this list of commands<br>about - show information about this command line interface<br>clear - clear the output console')
+        } else if (command === 'about') {
+          printOutput('This is a command line interface built using HTML, CSS, and JavaScript.<br><br>If you have any questions or suggestions, feel free to reach out to me at 18907176606@163.com.')
+        } else if (command === 'clear') {
+          output.innerHTML = ''
+        }else if (command === 'tr wf0201') {
+          printOutput(`<span class="teacher">Teacher List---${command}</span><br><br>Tian/jian/chao.(chao/ge)<br><br>age:43<br><br>birthday:9.9<br><br>number--wf0201`)
+        }else if (command === 'tr') {
+          printOutput('<><>Tian/jian/chao----------Chinese<br><br>Liu/jun/shan-----------Math<BR><BR>Liang/shu/jin------------English<br><br>Zhang/fan------------')
+        }else if (command === 'gift') {
+            printOutput('gift')
+          window.location.href = "password.html";
+}else if (command === 'login') {
+            printOutput('Go to--------<span class="file">Log In</span><br><br>LOG IN<a onclick="validateCaptcha()">   >>>点我验证</a>')
+    popupText.textContent = 'Welcome!Your number is';
+    popup.style.display = 'block';
+        }else if (command === 'cmd -v') {
+            printOutput('cmd version list<br><br>1.v2023.1.1(Abandoned)<br><br>2.v2023.1.2（Abandoned）<br><br>3.v2023.1.3<br><br>4. now:v2024.1.1')
+    }else if (command === 'i') {
+          printOutput('List<br><br> <p>当前积分:<span id="score">0</span></p>')
+ }else if (command === 'shop') {
+          printOutput('shop')
+ } else {
+          printOutput('<span class="error">ERR_404!</span>  command not found ')
+        }
+      }
+    })
+
+    function printOutput(message) {
+      const div = document.createElement('div')
+      div.innerHTML += `${message}\n`;
+      output.appendChild(div);
+      output.scrollTop = output.scrollHeight;
+    }
+closeButton.addEventListener('click', function() {
+  popup.style.display = 'none';
+});
+function generateCaptcha() {
+  var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-~!@#$%&*";
+  var captcha = "";
+
+  for (var i = 0; i < 8; i++) {
+    captcha += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+
+  return captcha;
+}
+
+// 更新验证码并设置定时器
+function updateCaptcha() {
+  var captchaText = document.getElementById("captchaText");
+  var captchaInput = document.getElementById("input");
+
+  // 生成并显示新的验证码
+  var newCaptcha = generateCaptcha();
+  captchaText.textContent = newCaptcha;
+
+  // 清空输入框
+  captchaInput.value = "";
+
+  // 设置5分钟定时器，自动更新验证码
+  setTimeout(updateCaptcha, 5 * 60 * 1000);
+}
+
+// 验证输入的验证码
+function validateCaptcha() {
+  var captchaText = document.getElementById("captchaText");
+  var captchaInput = document.getElementById("input");
+
+  if (captchaInput.value === captchaText.textContent) {
+   printOutput('<BR><BR><span class="v">√</span>验证码验证成功!');
+  } else {
+printOutput('<BR><BR><span class="f">×</span>验证码验证失败!');
+  }
+}
+
+// 页面加载完成后启动定时器
+window.addEventListener("load", function() {
+  updateCaptcha();
+});
+
+function showAlert(message) {
+  var alertBox = document.getElementById("alertBox");
+  var alertMessage = document.getElementById("alertMessage");
+  alertMessage.innerHTML = message;
+  alertBox.style.display = "flex";
+}
+
+function closeAlert() {
+  var alertBox = document.getElementById("alertBox");
+  alertBox.style.display = "none";
+}
+// 在页面加载时从本地存储中读取积分数据
+let score = parseInt(localStorage.getItem('score')) || 0;
+document.getElementById('score').textContent = score;
+
+// 获取商品按钮的元素列表
+
+  
+
+  </script>
+<script>
+    const windowElement = document.getElementById('cmd');
+    let isMaximized = false;
+    let originalWidth = windowElement.offsetWidth;
+    let originalHeight = windowElement.offsetHeight;
+    let originalLeft = windowElement.offsetLeft;
+    let originalTop = windowElement.offsetTop;
+
+    windowElement.addEventListener('mousedown', function(e) {
+        if (e.target.classList.contains('top-bar')) {
+            let offsetX = e.clientX - windowElement.offsetLeft;
+            let offsetY = e.clientY - windowElement.offsetTop;
+
+            document.addEventListener('mousemove', moveWindow);
+            document.addEventListener('mouseup', function() {
+                document.removeEventListener('mousemove', moveWindow);
+            });
+
+            function moveWindow(e) {
+                windowElement.style.left = e.clientX - offsetX + 'px';
+                windowElement.style.top = e.clientY - offsetY + 'px';
+            }
+        }
+    });
+
+    function closea() {
+        windowElement.style.display = 'none';
+    }
+    function block() {
+        windowElement.style.display = 'block';
+    }
+
+
+    function mina() {
+        windowElement.style.display = 'none';
+        const taskbar = document.querySelector('.taskbar');
+        const taskbarIcon = document.createElement('div');
+        taskbarIcon.className = 'taskbar-icon';
+        taskbarIcon.innerHTML = '<img src="cmd-2.png" alt="Cmd">';
+        taskbarIcon.addEventListener('click', function() {
+            windowElement.style.display = 'block';
+            taskbar.removeChild(taskbarIcon);
+        });
+        taskbar.appendChild(taskbarIcon);
+    }
+
+    function maxa() {
+        if (isMaximized) {
+            windowElement.style.width = originalWidth + 'px';
+            windowElement.style.height = originalHeight + 'px';
+            windowElement.style.left = originalLeft + 'px';
+            windowElement.style.top = originalTop + 'px';
+            isMaximized = false;
+        } else {
+            windowElement.style.width = '100%';
+            windowElement.style.height = '100%';
+            windowElement.style.left = 0;
+            windowElement.style.top = 0;
+            isMaximized = true;
+        }
+    }
+    function file() {
+        var elem = document.getElementById("e");
+        var width = 1;
+        var id = setInterval(frame, 10);
+        function frame() {
+            if (width >= 100) {
+                clearInterval(id);
+            } else {
+                width++;
+                elem.style.width = width + '%';
+            }
+        }
+    }
+function openNav() {
+    document.getElementById("mySidenav").style.width = "250px";
+    document.getElementById("main").style.marginLeft = "250px";
+}
+
+function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+    document.getElementById("main").style.marginLeft= "0";
+}
+
+</script>
+
+</body>
+</body></html>

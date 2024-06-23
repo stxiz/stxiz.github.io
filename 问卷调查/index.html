@@ -1,0 +1,39 @@
+
+<HTML>
+<BODY>
+<script src="https://assets.xmplus.cn/surveylite/embed/embed.min.js"></script>
+
+<script>
+   function onSubmit() { 
+        console.log('received survey response')
+    }
+    function onClose() { 
+        console.log('do something on close window')
+    }
+    function handleLoad() { 
+        console.log("do something after loading survey")
+    }
+    function onFailed(msg) { 
+        console.error("surve loading failed: ", msg) 
+    }
+    window.onload = function() { 
+        window.surveylite.initSurvey({
+            "token": "",
+            "sid": "6434562370430976",
+            "channelId": "6503025117418496",
+            "width": "450px",
+            "externalUserId": "",
+            "departmentCode": "",
+            "externalCompanyId": "",
+            "env": "https://www.surveyplus.cn",
+            "animation": true,
+            "onClose": onClose,
+            "onSubmit": onSubmit,
+            "onLoad": handleLoad,
+            "onFailed": onFailed,
+            "parameters":{"key": "value"}
+        })
+    }
+</script>
+</BODY>
+</HTML>
