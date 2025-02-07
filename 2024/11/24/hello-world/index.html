@@ -184,7 +184,7 @@ setTimeout(() => {
     }
     let ls = []
 
-    await fetch('https://stxiz-twikoop.hf.space', {
+    await fetch('https://prehy.netlify.app/.netlify/functions/twikoo', {
         method: "POST",
         body: JSON.stringify({
             "event": "GET_RECENT_COMMENTS",
@@ -279,7 +279,7 @@ utils.addGlobalFn('pjaxSend', () => {
         const ele = document.querySelectorAll('.twikoo-count')
         if (!ele) return
         twikoo.getCommentsCount({
-            envId: 'https://stxiz-twikoop.hf.space',
+            envId: 'https://prehy.netlify.app/.netlify/functions/twikoo',
             region: '',
             urls: [window.location.pathname],
             includeReply: false
@@ -292,7 +292,7 @@ utils.addGlobalFn('pjaxSend', () => {
     const init = () => {
         twikoo.init(Object.assign({
             el: '#twikoo-wrap',
-            envId: 'https://stxiz-twikoop.hf.space',
+            envId: 'https://prehy.netlify.app/.netlify/functions/twikoo',
             region: '',
             path: window.location.pathname,
             onCommentLoaded: () => {
@@ -322,7 +322,7 @@ utils.addGlobalFn('pjaxSend', () => {
     }
 })()
 </script><script>async function barrageTwikoo() {
-    await fetch("https://stxiz-twikoop.hf.space", {
+    await fetch("https://prehy.netlify.app/.netlify/functions/twikoo", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
